@@ -1,0 +1,6 @@
+## Author: Shauren
+## Interface: 80000
+## Notes: Announces your successful purges/dispels to party/raid
+## Title: PurgeAnnouncer
+## Version: 1.0
+PurgeAnnouncer.lua

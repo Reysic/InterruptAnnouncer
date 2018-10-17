@@ -25,27 +25,27 @@ local function GetRaidIcon(unitFlags)
 	return "{rt"..RaidIconMaskToIndex[raidTarget].."}";
 end
 
-local interr = CreateFrame("Frame", "InterruptTrackerFrame", UIParent);
-interr:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
-interr:RegisterEvent("PLAYER_ENTERING_WORLD");
-interr:SetScript("OnEvent", function(self, event, ...)
+local purge = CreateFrame("Frame", "PurgeTrackerFrame", UIParent);
+purge:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
+purge:RegisterEvent("PLAYER_ENTERING_WORLD");
+purge:SetScript("OnEvent", function(self, event, ...)
     if (event == "COMBAT_LOG_EVENT_UNFILTERED") then
         local type, _, sourceGUID, sourceName, _, _, destGUID, destName, _, destRaidFlags, spellId = select(2, CombatLogGetCurrentEventInfo());
-        if (type == "SPELL_INTERRUPT" and UnitGUID("player") == sourceGUID) then
+        if (type == "SPELL_DISPEL" and UnitGUID("player") == sourceGUID) then
             local extraSpellID = select(15, CombatLogGetCurrentEventInfo());
             local destIcon = "";
             if (destName) then
                 destIcon = GetRaidIcon(destRaidFlags);
             end
 
-            local interruptingSpell = GetSpellLink(spellId);
-            local interruptedSpell = GetSpellLink(extraSpellID);
+            local purgingSpell = GetSpellLink(spellId);
+            local purgedSpell = GetSpellLink(extraSpellID);
             local msg = "";
             if (IsInGroup()) then
-                msg = interruptingSpell.." interrupted "..destIcon..destName.."'s "..interruptedSpell.."!";
+                msg = purgingSpell.." purged "..destIcon..destName.."'s "..purgedSpell.."!";
             else
                 local destStr = format(TEXT_MODE_A_STRING_SOURCE_UNIT, "", destGUID, destName, destName); -- empty icon, destRaidFlags = 0 when solo
-                msg = "\124cffff4809"..sourceName..": \124r"..interruptingSpell.." \124cffff4809interrupted "..destStr.."'s\124r "..interruptedSpell.."\124cffff4809!\124r";
+                msg = "\124cffff4809"..sourceName..": \124r"..purgingSpell.." \124cffff4809purged "..destStr.."'s\124r "..purgedSpell.."\124cffff4809!\124r";
             end
 
             if (GetNumGroupMembers() > 0) then
