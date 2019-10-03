@@ -1,6 +1,6 @@
 ## Author: Shauren
 ## Interface: 80200
 ## Notes: Announces your successful interrupts to party/raid
-## Title: InterruptAnnouncer
+## Title: PurgeAnnouncer
 ## Version: 1.0
-InterruptAnnouncer.lua
+PurgeAnnouncer.lua
